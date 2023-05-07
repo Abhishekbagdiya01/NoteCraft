@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "239860720162",
+    "project_id": "notecraft-a6e1a",
+    "storage_bucket": "notecraft-a6e1a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:239860720162:android:161a29ae6c91419893207b",
+        "android_client_info": {
+          "package_name": "com.example.firebase_note_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "239860720162-7sn2q66irlqeat3ardqurp6bmi2fmr1a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaQJds6A_h70RPi07EPpEgjNYF6gUjt64"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "239860720162-7sn2q66irlqeat3ardqurp6bmi2fmr1a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
