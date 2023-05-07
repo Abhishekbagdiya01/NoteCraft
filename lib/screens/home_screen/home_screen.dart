@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ViewNotesScreen(
-                                        notesId: arrNotes[index].toString(),
+                                        noteId: arrNotes[index].id,
                                         notesTitle: arrNotes[index].title,
                                         notesDesc: arrNotes[index].desc,
                                         notesTime: arrNotes[index].dateTime,

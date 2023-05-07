@@ -1,16 +1,17 @@
 import 'package:firebase_note_app/screens/home_screen/home_screen.dart';
+import 'package:firebase_note_app/screens/update_notes_screen/update_notes_screen.dart';
 import 'package:firebase_note_app/ui_helper.dart';
 import 'package:flutter/material.dart';
 
 class ViewNotesScreen extends StatefulWidget {
   ViewNotesScreen(
-      {required this.notesId,
+      {required this.noteId,
       required this.notesTitle,
       required this.notesDesc,
-      required this.notesTime,
+      this.notesTime,
       super.key});
 
-  var notesId;
+  var noteId;
   var notesTitle;
   var notesDesc;
   var notesTime;
@@ -65,14 +66,14 @@ class _ViewNotesScreenState extends State<ViewNotesScreen> {
                           borderRadius: BorderRadius.circular(15)),
                       child: IconButton(
                         onPressed: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) => EditContentPage(
-                          //           notesId: widget.notesId,
-                          //           notesTitle: widget.notesTitle,
-                          //           notesDesc: widget.notesDesc),
-                          //     ));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UpdateNoteScreen(
+                                    noteId: widget.noteId,
+                                    notesTitle: widget.notesTitle,
+                                    notesDesc: widget.notesDesc),
+                              ));
                         },
                         icon: Icon(Icons.edit),
                         color: Colors.white,

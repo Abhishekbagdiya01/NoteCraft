@@ -56,6 +56,22 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       },
     );
 
+    on<UpdateNotesEvent>(
+      (event, emit) async {
+        emit(NotesLoadingStates());
+        User? currentUser = await FirebaseAuth.instance.currentUser!;
+        FirebaseFirestore.instance
+            .collection(currentUser.email!)
+            .doc(event.noteId)
+            .update(NotesModel(
+                    id: event.noteId,
+                    title: event.model.title,
+                    desc: event.model.desc,
+                    dateTime: event.model.dateTime)
+                .toJson());
+      },
+    );
+
     on<DeleteNoteEvent>(
       (event, emit) async {
         emit(NotesLoadingStates());

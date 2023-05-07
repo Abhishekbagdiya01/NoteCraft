@@ -10,6 +10,12 @@ class AddNotesEvent extends NotesEvent {
 
 class FetchNoteEvent extends NotesEvent {}
 
+class UpdateNotesEvent extends NotesEvent {
+  String noteId;
+  NotesModel model;
+  UpdateNotesEvent({required this.noteId, required this.model});
+}
+
 class DeleteNoteEvent extends NotesEvent {
   String notesId;
   DeleteNoteEvent(this.notesId);
