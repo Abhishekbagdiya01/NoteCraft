@@ -12,6 +12,12 @@ class AuthLoadedState extends AuthState {
   AuthLoadedState(this.arrUserCred);
 }
 
+class AuthUserCreatedState extends AuthState {}
+
+class AuthUserLoggedInState extends AuthState {}
+
+class AuthUserLoggedOutState extends AuthState {}
+
 class AuthErrorState extends AuthState {
   String errorMsg;
   AuthErrorState(this.errorMsg);

@@ -17,15 +17,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                 email: event.userAuthModel.email!, password: event.password)
             .then((value) async {
           User? currentUser = await FirebaseAuth.instance.currentUser!;
-          UserAuthModel newAuthModel = UserAuthModel(
-              id: currentUser.uid,
-              name: event.userAuthModel.name,
-              email: event.userAuthModel.email,
-              mobileNo: event.userAuthModel.mobileNo);
-          await FirebaseFirestore.instance
-              .collection("Users")
-              .doc(event.userAuthModel.email)
-              .set(newAuthModel.toJson());
+          print("current user" + currentUser.toString());
+
+          if (currentUser != null) {
+            UserAuthModel newAuthModel = UserAuthModel(
+                id: currentUser.uid,
+                name: event.userAuthModel.name,
+                email: event.userAuthModel.email,
+                mobileNo: event.userAuthModel.mobileNo);
+
+            await FirebaseFirestore.instance
+                .collection("Users")
+                .doc(event.userAuthModel.email)
+                .set(newAuthModel.toJson());
+
+            print("in Auth Bloc");
+            emit(AuthUserCreatedState());
+          }
         });
       } on FirebaseAuthException catch (e) {
         emit(AuthErrorState(e.toString()));
@@ -36,8 +44,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (event, emit) async {
         emit(AuthLoadingState());
         try {
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-              email: event.email, password: event.password);
+          await FirebaseAuth.instance
+              .signInWithEmailAndPassword(
+                  email: event.email, password: event.password)
+              .then((value) {
+            emit(AuthUserLoggedInState());
+          });
+        } catch (e) {
+          emit(AuthErrorState(e.toString()));
+        }
+      },
+    );
+
+    on<UserLogOutEvent>(
+      (event, emit) async {
+        emit(AuthLoadingState());
+        try {
+          await FirebaseAuth.instance.signOut().then((value) {
+            emit(AuthUserLoggedOutState());
+          });
         } catch (e) {
           emit(AuthErrorState(e.toString()));
         }

@@ -28,25 +28,25 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       customSnackbarMessenger(context, "Please enter email and password");
     } else {
-      try {
-        await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: _emailController.text,
-                password: _passwordController.text)
-            .then((value) {
-          customSnackbarMessenger(context, "Login successful");
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(),
-              ));
-        });
-      } on FirebaseAuthException catch (e) {
-        customSnackbarMessenger(context, e.toString());
-      }
+      // try {
+      //   await FirebaseAuth.instance
+      //       .signInWithEmailAndPassword(
+      //           email: _emailController.text,
+      //           password: _passwordController.text)
+      //       .then((value) {
+      //     customSnackbarMessenger(context, "Login successful");
+      //     Navigator.pushReplacement(
+      //         context,
+      //         MaterialPageRoute(
+      //           builder: (context) => HomeScreen(),
+      //         ));
+      //   });
+      // } on FirebaseAuthException catch (e) {
+      //   customSnackbarMessenger(context, e.toString());
+      // }
 
-      // BlocProvider.of<AuthBloc>(context).add(UserLoginEvent(
-      //     email: _emailController.text, password: _passwordController.text));
+      BlocProvider.of<AuthBloc>(context).add(UserLoginEvent(
+          email: _emailController.text, password: _passwordController.text));
     }
   }
 
@@ -56,10 +56,24 @@ class _LoginScreenState extends State<LoginScreen> {
     var height = MediaQuery.of(context).size.height;
     var orientation = MediaQuery.of(context).orientation;
 
-    return Scaffold(
-        body: orientation == Orientation.portrait
-            ? portraitUi(isLight, height)
-            : landscapeUI(isLight));
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthUserLoggedInState) {
+          customSnackbarMessenger(context, "Login successful");
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+              ));
+        } else if (state is AuthErrorState) {
+          customSnackbarMessenger(context, state.errorMsg);
+        }
+      },
+      child: Scaffold(
+          body: orientation == Orientation.portrait
+              ? portraitUi(isLight, height)
+              : landscapeUI(isLight)),
+    );
   }
 
   Widget mainUi(isLight) {

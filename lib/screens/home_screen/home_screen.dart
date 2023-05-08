@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_note_app/bloc/notes_bloc.dart';
+import 'package:firebase_note_app/custom_widgets/custom_snackbar.dart';
 import 'package:firebase_note_app/models/notes_model.dart';
 import 'package:firebase_note_app/screens/add_notes_screen/add_notes_screen.dart';
+import 'package:firebase_note_app/screens/user_onboarding/bloc/auth_bloc.dart';
 import 'package:firebase_note_app/screens/user_onboarding/sign_up/sign_up_screen.dart';
 
 import 'package:firebase_note_app/screens/view_notes_screen.dart/view_notes_screen.dart';
@@ -26,6 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  void loggedOut() {
+    BlocProvider.of<AuthBloc>(context).add(UserLogOutEvent());
+  }
   // List arrNotes = [
   //   {'title': "This is title", 'desc': 'This is desc'},
   //   {'title': "This is title", 'desc': 'This is desc'},
@@ -40,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   );
   @override
   Widget build(BuildContext context) {
+    var isLight = Theme.of(context).brightness == Brightness.light;
     return Scaffold(
       body: Container(
         color: Colors.black,
@@ -62,20 +68,36 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                           color: Colors.grey.shade800,
                           borderRadius: BorderRadius.circular(15)),
-                      child: IconButton(
-                        onPressed: () {
-                          FirebaseAuth.instance.signOut().then((value) {
-                            Navigator.push(
+                      child: BlocListener<AuthBloc, AuthState>(
+                        listener: (context, state) {
+                          if (state is AuthUserLoggedOutState) {
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => SignUpScreen(),
                                 ));
-                          });
+                            customSnackbarMessenger(context,
+                                "Thanks for using our app, come back soon!");
+                          } else if (state is AuthErrorState) {
+                            customSnackbarMessenger(context, state.errorMsg);
+                          }
                         },
-                        icon: Icon(
-                          Icons.logout,
-                          size: 34,
-                          color: Colors.white,
+                        child: IconButton(
+                          onPressed: () {
+                            loggedOut();
+                            // FirebaseAuth.instance.signOut().then((value) {
+                            //   Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //         builder: (context) => SignUpScreen(),
+                            //       ));
+                            // });
+                          },
+                          icon: Icon(
+                            Icons.logout,
+                            size: 34,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     )
@@ -126,31 +148,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ? Colors.green
                                           : Colors.orangeAccent,
                                   borderRadius: BorderRadius.circular(5)),
-                              child: Center(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    size,
-                                    Text(
-                                      arrNotes[index].title!,
-                                      style: mTextStyle16(
-                                          mColor: MyColor.bgWColor),
+                              child: Column(
+                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  size,
+                                  Text(
+                                    arrNotes[index].title!,
+                                    style: mTextStyle16(
+                                      mColor: MyColor.bgWColor,
                                     ),
-                                    size,
-                                    Text(
-                                      arrNotes[index].desc!,
-                                      style: mTextStyle16(
-                                          mColor: MyColor.bgWColor),
-                                    ),
-                                    size,
-                                    Text(
-                                      " ${DateTime.parse(arrNotes[index].dateTime!).day.toString()}-${DateTime.parse(arrNotes[index].dateTime!).month.toString()}-${DateTime.parse(arrNotes[index].dateTime!).year.toString()} ",
-                                      style: mTextStyle16(
-                                          mColor: MyColor.bgWColor
-                                              .withOpacity(0.6)),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  size,
+                                  Text(
+                                    arrNotes[index].desc!,
+                                    style:
+                                        mTextStyle16(mColor: MyColor.bgWColor),
+                                  ),
+                                  size,
+                                  Text(
+                                    " ${DateTime.parse(arrNotes[index].dateTime!).day.toString()}-${DateTime.parse(arrNotes[index].dateTime!).month.toString()}-${DateTime.parse(arrNotes[index].dateTime!).year.toString()} ",
+                                    style: mTextStyle16(
+                                        mColor:
+                                            MyColor.bgWColor.withOpacity(0.6)),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -180,6 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ));
         },
         child: Icon(
+          color: isLight ? Colors.white : Colors.white,
           Icons.add,
           size: 30,
         ),

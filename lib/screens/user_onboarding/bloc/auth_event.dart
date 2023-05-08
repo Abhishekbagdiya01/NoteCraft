@@ -12,5 +12,7 @@ class UserSignUpEvent extends AuthEvent {
 class UserLoginEvent extends AuthEvent {
   String email;
   String password;
-  UserLoginEvent({required this.email,required this.password});
+  UserLoginEvent({required this.email, required this.password});
 }
+
+class UserLogOutEvent extends AuthEvent {}

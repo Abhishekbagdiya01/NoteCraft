@@ -1,7 +1,9 @@
+import 'package:firebase_note_app/bloc/notes_bloc.dart';
 import 'package:firebase_note_app/screens/home_screen/home_screen.dart';
 import 'package:firebase_note_app/screens/update_notes_screen/update_notes_screen.dart';
 import 'package:firebase_note_app/ui_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ViewNotesScreen extends StatefulWidget {
   ViewNotesScreen(

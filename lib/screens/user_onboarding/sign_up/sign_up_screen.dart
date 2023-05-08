@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_note_app/custom_widgets/custom_logo.dart';
@@ -44,15 +46,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _nameController == "") {
       customSnackbarMessenger(context, "Required field cannot be empty");
     } else {
-      // UserAuthModel newUser = UserAuthModel(
-      //     id: '',
-      //     name: _nameController.text,
-      //     email: _emailController.text,
-      //     mobileNo: _mobNoController.text);
+      UserAuthModel newUser = UserAuthModel(
+          id: '',
+          name: _nameController.text,
+          email: _emailController.text,
+          mobileNo: _mobNoController.text);
 
-      // BlocProvider.of<AuthBloc>(context).add(UserSignUpEvent(
-      //     userAuthModel: newUser, password: _nameController.text));
-      try {
+      BlocProvider.of<AuthBloc>(context).add(UserSignUpEvent(
+          userAuthModel: newUser, password: _passwordController.text));
+
+      /* try {
         await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
                 email: _emailController.text,
@@ -80,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         });
       } on FirebaseAuthException catch (e) {
         customSnackbarMessenger(context, e.toString());
-      }
+      }*/
     }
   }
 
@@ -89,11 +92,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
     var isLight = Theme.of(context).brightness == Brightness.light;
     var height = MediaQuery.of(context).size.height;
     var orientation = MediaQuery.of(context).orientation;
+
     print(orientation);
-    return Scaffold(
-        body: orientation == Orientation.portrait
-            ? portraitUI(isLight, height)
-            : landscapeUI(isLight));
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthUserCreatedState) {
+          print("asdf");
+          customSnackbarMessenger(context, "Account created successfully");
+
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+              ));
+        } else if (state is AuthErrorState) {
+          customSnackbarMessenger(context, state.errorMsg);
+        }
+      },
+      child: Scaffold(
+          body: orientation == Orientation.portrait
+              ? portraitUI(isLight, height)
+              : landscapeUI(isLight)),
+    );
   }
 
   Widget mainUi(isLight) {

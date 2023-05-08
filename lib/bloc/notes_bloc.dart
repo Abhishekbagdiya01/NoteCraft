@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_note_app/models/notes_model.dart';
 import 'package:meta/meta.dart';
-
 part 'notes_event.dart';
 part 'notes_state.dart';
 
@@ -39,6 +36,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       (event, emit) async {
         emit(NotesLoadingStates());
         User? currentUser = await FirebaseAuth.instance.currentUser!;
+        print("CurrentUser" + currentUser.toString());
         var arrNotes = <NotesModel>[];
         arrNotes = await FirebaseFirestore.instance
             .collection(currentUser.email!)

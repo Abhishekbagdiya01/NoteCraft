@@ -22,8 +22,10 @@ class CustomTextField extends StatelessWidget {
   bool obscureText;
   @override
   Widget build(BuildContext context) {
+    var isLight = Theme.of(context).brightness == Brightness.light;
     return TextField(
-      style: mTextStyle25(),
+      style: mTextStyle25(
+          mColor: isLight ? MyColor.textBColor : MyColor.textWColor),
       controller: controller,
       keyboardType: textInputType,
       obscureText: obscureText,
