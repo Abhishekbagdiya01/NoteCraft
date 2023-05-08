@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_note_app/custom_widgets/custom_logo.dart';
+import 'package:firebase_note_app/screens/home_screen/home_screen.dart';
 import 'package:firebase_note_app/screens/user_onboarding/sign_up/sign_up_screen.dart';
 import 'package:firebase_note_app/ui_helper.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +20,19 @@ class _SplashScreenState extends State<SplashScreen> {
     // TODO: implement initState
     super.initState();
     Timer(Duration(milliseconds: 300), () {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SignUpScreen(),
-          ));
+      String? curentUserId = FirebaseAuth.instance.currentUser?.uid;
+
+      curentUserId != null
+          ? Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+              ))
+          : Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SignUpScreen(),
+              ));
     });
   }
 

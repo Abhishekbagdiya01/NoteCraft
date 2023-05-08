@@ -20,3 +20,8 @@ class DeleteNoteEvent extends NotesEvent {
   String notesId;
   DeleteNoteEvent(this.notesId);
 }
+
+class SearchNotesEvent extends NotesEvent {
+  String searchQuery;
+  SearchNotesEvent(this.searchQuery);
+}

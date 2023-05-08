@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_note_app/bloc/notes_bloc.dart';
 import 'package:firebase_note_app/models/notes_model.dart';
 import 'package:firebase_note_app/screens/add_notes_screen/add_notes_screen.dart';
+import 'package:firebase_note_app/screens/user_onboarding/sign_up/sign_up_screen.dart';
+
 import 'package:firebase_note_app/screens/view_notes_screen.dart/view_notes_screen.dart';
 import 'package:firebase_note_app/ui_helper.dart';
 import 'package:flutter/material.dart';
@@ -61,9 +63,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.grey.shade800,
                           borderRadius: BorderRadius.circular(15)),
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          FirebaseAuth.instance.signOut().then((value) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SignUpScreen(),
+                                ));
+                          });
+                        },
                         icon: Icon(
-                          Icons.search,
+                          Icons.logout,
                           size: 34,
                           color: Colors.white,
                         ),

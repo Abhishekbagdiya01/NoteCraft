@@ -26,17 +26,22 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       customSnackbarMessenger(context, "Please enter email and password");
     } else {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: _emailController.text, password: _passwordController.text)
-          .then((value) {
-        customSnackbarMessenger(context, "Login successful");
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(),
-            ));
-      });
+      try {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: _emailController.text,
+                password: _passwordController.text)
+            .then((value) {
+          customSnackbarMessenger(context, "Login successful");
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+              ));
+        });
+      } on FirebaseAuthException catch (e) {
+        customSnackbarMessenger(context, e.toString());
+      }
     }
   }
 

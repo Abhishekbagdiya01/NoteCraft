@@ -96,5 +96,25 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
         emit(NotesLoadedStates(arrNotes));
       },
     );
+
+    on<SearchNotesEvent>(
+      (event, emit) async {
+        emit(NotesLoadingStates());
+        User? currentUser = await FirebaseAuth.instance.currentUser!;
+        var arrNotes = <NotesModel>[];
+        arrNotes = await FirebaseFirestore.instance
+            .collection(currentUser.email!)
+            .where('title', isGreaterThanOrEqualTo: event.searchQuery)
+            .get()
+            .then((QuerySnapshot querySnapshot) {
+          querySnapshot.docs.forEach((doc) {
+            arrNotes
+                .add(NotesModel.fromJson(doc.data() as Map<String, dynamic>));
+          });
+          return arrNotes;
+        });
+        emit(NotesLoadedStates(arrNotes));
+      },
+    );
   }
 }
