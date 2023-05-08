@@ -28,65 +28,63 @@ class _ViewNotesScreenState extends State<ViewNotesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.black,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade800,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: IconButton(
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.black,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade800,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(
+                              Icons.navigate_before,
+                              size: 30,
+                              color: MyColor.bgWColor,
+                            )),
+                      ),
+                      Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade800,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: IconButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => HomeScreen(),
-                                ));
-                          },
-                          icon: Icon(
-                            Icons.navigate_before,
-                            size: 30,
-                            color: MyColor.bgWColor,
-                          )),
-                    ),
-                    Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade800,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UpdateNoteScreen(
+                                  builder: (context) => UpdateNoteScreen(
                                     noteId: widget.noteId,
                                     notesTitle: widget.notesTitle,
-                                    notesDesc: widget.notesDesc),
-                              ));
-                        },
-                        icon: Icon(Icons.edit),
-                        color: Colors.white,
+                                    notesDesc: widget.notesDesc,
+                                    noteDate: widget.notesTime,
+                                  ),
+                                ));
+                          },
+                          icon: Icon(Icons.edit),
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.81,
-                  child: SingleChildScrollView(
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,9 +109,9 @@ class _ViewNotesScreenState extends State<ViewNotesScreen> {
                         ),
                       ],
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

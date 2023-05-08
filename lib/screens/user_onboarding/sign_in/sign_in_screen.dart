@@ -4,9 +4,11 @@ import 'package:firebase_note_app/custom_widgets/custom_logo.dart';
 import 'package:firebase_note_app/custom_widgets/custom_snackbar.dart';
 import 'package:firebase_note_app/custom_widgets/custom_textfield.dart';
 import 'package:firebase_note_app/screens/home_screen/home_screen.dart';
+import 'package:firebase_note_app/screens/user_onboarding/bloc/auth_bloc.dart';
 import 'package:firebase_note_app/screens/user_onboarding/sign_up/sign_up_screen.dart';
 import 'package:firebase_note_app/ui_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -42,6 +44,9 @@ class _LoginScreenState extends State<LoginScreen> {
       } on FirebaseAuthException catch (e) {
         customSnackbarMessenger(context, e.toString());
       }
+
+      // BlocProvider.of<AuthBloc>(context).add(UserLoginEvent(
+      //     email: _emailController.text, password: _passwordController.text));
     }
   }
 
@@ -58,92 +63,89 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget mainUi(isLight) {
-    return SafeArea(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomLogo(
-                isLight: isLight,
-                radius: 60,
-                height: 80,
-                width: 80,
-              ),
-              SizedBox(
-                height: 21,
-              ),
-              Text(
-                "Hello Again",
-                style: mTextStyle43(
-                  mColor: isLight ? MyColor.bgBColor : MyColor.bgWColor,
-                ),
-              ),
-              Text(
-                "Welcome back you have been missed",
-                style: mTextStyle16(mColor: MyColor.secondaryBColor),
-              ),
-              SizedBox(
-                height: 28,
-              ),
-              CustomTextField(
-                color: isLight ? MyColor.bgBColor : MyColor.bgWColor,
-                hintText: "Email",
-                obscureText: false,
-                controller: emailController,
-                icon: Icons.mail_outlined,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              CustomTextField(
-                color: isLight ? MyColor.bgBColor : MyColor.bgWColor,
-                hintText: "Password",
-                obscureText: hidePassword,
-                controller: passwordController,
-                icon: Icons.lock_outline,
-                suffixIcon:
-                    hidePassword ? Icons.visibility : Icons.visibility_off,
-                voidCallback: () {
-                  hidePassword = !hidePassword;
-                  setState(() {});
-                },
-              ),
-              SizedBox(
-                height: 21,
-              ),
-              ElevatedButton(
-                child: Text("Login"),
-                onPressed: () {
-                  login(emailController, passwordController);
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Text("Don't have an acount ?"),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SignUpScreen(),
-                            ));
-                      },
-                      child: Text("Sign-Up",
-                          style: mTextStyle16(mColor: Colors.blue)))
-                ],
-              )
-            ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SafeArea(
+          child: SizedBox(
+            height: 10,
           ),
         ),
-      ),
+        CustomLogo(
+          isLight: isLight,
+          radius: 60,
+          height: 80,
+          width: 80,
+        ),
+        SizedBox(
+          height: 21,
+        ),
+        Text(
+          "Hello Again",
+          style: mTextStyle43(
+            mColor: isLight ? MyColor.bgBColor : MyColor.bgWColor,
+          ),
+        ),
+        Text(
+          "Welcome back you have been missed",
+          style: mTextStyle16(mColor: MyColor.secondaryBColor),
+        ),
+        SizedBox(
+          height: 28,
+        ),
+        CustomTextField(
+          color: isLight ? MyColor.bgBColor : MyColor.bgWColor,
+          hintText: "Email",
+          obscureText: false,
+          controller: emailController,
+          icon: Icons.mail_outlined,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        CustomTextField(
+          color: isLight ? MyColor.bgBColor : MyColor.bgWColor,
+          hintText: "Password",
+          obscureText: hidePassword,
+          controller: passwordController,
+          icon: Icons.lock_outline,
+          suffixIcon: hidePassword ? Icons.visibility : Icons.visibility_off,
+          voidCallback: () {
+            hidePassword = !hidePassword;
+            setState(() {});
+          },
+        ),
+        SizedBox(
+          height: 21,
+        ),
+        ElevatedButton(
+          child: Text("Login"),
+          onPressed: () {
+            login(emailController, passwordController);
+          },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: [
+            Text("Don't have an acount ?"),
+            SizedBox(
+              width: 5,
+            ),
+            TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SignUpScreen(),
+                      ));
+                },
+                child:
+                    Text("Sign-Up", style: mTextStyle16(mColor: Colors.blue)))
+          ],
+        )
+      ],
     );
   }
 
@@ -170,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-        Expanded(child: mainUi(isLight))
+        Expanded(child: SingleChildScrollView(child: mainUi(isLight)))
       ],
     );
   }
