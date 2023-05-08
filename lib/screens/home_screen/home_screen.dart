@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ? Colors.red
                                       : index % 3 == 1
                                           ? Colors.green
-                                          : Colors.yellow,
+                                          : Colors.orangeAccent,
                                   borderRadius: BorderRadius.circular(5)),
                               child: Center(
                                 child: Column(
