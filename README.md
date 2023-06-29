@@ -1,16 +1,7 @@
 # firebase_note_app
 
-A new Flutter project.
+NoteCraft is a modern and intuitive note-taking app designed and developed using the Flutter framework. With the help of Bloc for state management and Firebase for storing user information and notes, NoteCraft makes it easy to create, organize, and access your notes on the go. Whether you're taking notes for work, school, or personal use
 
-## Getting Started
+## Preview
+[Click to run](https://notecraft-a6e1a.web.app/#/)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
