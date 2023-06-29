@@ -11,10 +11,12 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     on<AddNotesEvent>((event, emit) async {
       emit(NotesLoadingStates());
       User? currentUser = await FirebaseAuth.instance.currentUser!;
+
+      // generate a unique document ID in Firebase Firestore and assign it to variable noteId
       String noteId =
           FirebaseFirestore.instance.collection(currentUser.email!).doc().id;
-
       print("notes Id  : " + noteId);
+
       await FirebaseFirestore.instance
           .collection(currentUser.email!)
           .doc(noteId)
@@ -37,7 +39,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
         emit(NotesLoadingStates());
         User? currentUser = await FirebaseAuth.instance.currentUser!;
         print("CurrentUser" + currentUser.toString());
-        var arrNotes = <NotesModel>[];
+        List<NotesModel> arrNotes = [];
         arrNotes = await FirebaseFirestore.instance
             .collection(currentUser.email!)
             .get()
@@ -80,7 +82,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
             .doc(event.notesId)
             .delete();
 
-        var arrNotes = <NotesModel>[];
+        List<NotesModel> arrNotes = [];
         arrNotes = await FirebaseFirestore.instance
             .collection(currentUser.email!)
             .get()

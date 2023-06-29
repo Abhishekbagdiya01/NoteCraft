@@ -11,6 +11,7 @@ import 'package:firebase_note_app/ui_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -117,67 +118,79 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   } else if (state is NotesLoadedStates) {
                     arrNotes = state.arrNotes;
-                    return MasonryGridView.count(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      itemCount: arrNotes.length,
-                      itemBuilder: (context, index) {
-                        return StaggeredGridTile.count(
-                          crossAxisCellCount: 4,
-                          mainAxisCellCount: 4,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => ViewNotesScreen(
-                                        noteId: arrNotes[index].id,
-                                        notesTitle: arrNotes[index].title,
-                                        notesDesc: arrNotes[index].desc,
-                                        notesTime: arrNotes[index].dateTime,
-                                      )));
-                            },
-                            onLongPress: () {
-                              BlocProvider.of<NotesBloc>(context)
-                                  .add(DeleteNoteEvent(arrNotes[index].id!));
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: index % 2 == 0
-                                      ? Colors.red
-                                      : index % 3 == 1
-                                          ? Colors.green
-                                          : Colors.orangeAccent,
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: Column(
-                                // crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  size,
-                                  Text(
-                                    arrNotes[index].title!,
-                                    style: mTextStyle16(
-                                      mColor: MyColor.bgWColor,
+
+                    return arrNotes.isEmpty
+                        ? Text(
+                            "no notes are there :( \nyou can add new notes by clicking on + icon ",
+                            style: mTextStyle25(
+                              mColor: MyColor.bgWColor,
+                            ))
+                        : MasonryGridView.count(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            itemCount: arrNotes.length,
+                            itemBuilder: (context, index) {
+                              return StaggeredGridTile.count(
+                                crossAxisCellCount: 4,
+                                mainAxisCellCount: 4,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ViewNotesScreen(
+                                                  noteId: arrNotes[index].id,
+                                                  notesTitle:
+                                                      arrNotes[index].title,
+                                                  notesDesc:
+                                                      arrNotes[index].desc,
+                                                  notesTime:
+                                                      arrNotes[index].dateTime,
+                                                )));
+                                  },
+                                  onLongPress: () {
+                                    BlocProvider.of<NotesBloc>(context).add(
+                                        DeleteNoteEvent(arrNotes[index].id!));
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: index % 2 == 0
+                                            ? Colors.red
+                                            : index % 3 == 1
+                                                ? Colors.green
+                                                : Colors.orangeAccent,
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Column(
+                                      // crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        size,
+                                        Text(
+                                          arrNotes[index].title!,
+                                          style: mTextStyle16(
+                                            mColor: MyColor.bgWColor,
+                                          ),
+                                        ),
+                                        size,
+                                        Text(
+                                          arrNotes[index].desc!,
+                                          style: mTextStyle16(
+                                              mColor: MyColor.bgWColor),
+                                        ),
+                                        size,
+                                        Text(
+                                          " ${DateTime.parse(arrNotes[index].dateTime!).day.toString()}-${DateTime.parse(arrNotes[index].dateTime!).month.toString()}-${DateTime.parse(arrNotes[index].dateTime!).year.toString()} ",
+                                          style: mTextStyle16(
+                                              mColor: MyColor.bgWColor
+                                                  .withOpacity(0.6)),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  size,
-                                  Text(
-                                    arrNotes[index].desc!,
-                                    style:
-                                        mTextStyle16(mColor: MyColor.bgWColor),
-                                  ),
-                                  size,
-                                  Text(
-                                    " ${DateTime.parse(arrNotes[index].dateTime!).day.toString()}-${DateTime.parse(arrNotes[index].dateTime!).month.toString()}-${DateTime.parse(arrNotes[index].dateTime!).year.toString()} ",
-                                    style: mTextStyle16(
-                                        mColor:
-                                            MyColor.bgWColor.withOpacity(0.6)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
+                                ),
+                              );
+                            },
+                          );
                   } else if (state is NotesErrorStates) {
                     return Center(
                       child: Text(state.errorMsg),
